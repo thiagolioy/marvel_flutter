@@ -31,7 +31,7 @@ samples, guidance on mobile development, and a full API reference.
 ## Appearance
 
 <h3 align="center">
-  <img src="assets/marvel_screens.png" alt="Marvel Screens" />
+  <img src="assets/git/marvel_screens.png" alt="Marvel Screens" />
 </h3>
 
 
