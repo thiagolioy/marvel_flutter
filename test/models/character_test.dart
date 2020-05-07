@@ -30,6 +30,6 @@ void main() {
   test('Should be able to return image full path', () async {
     final char = Character.fromJson(json);   
     final fullPath = char.thumbnail.fullPath();
-    expect(fullPath, char.thumbnail.path + char.thumbnail.ext);
+    expect(fullPath, char.thumbnail.path + "." + char.thumbnail.ext);
   });
 }

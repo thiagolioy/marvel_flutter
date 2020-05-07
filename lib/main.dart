@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marvel/UI/CharacterGridWidget.dart';
 import 'package:marvel/services/api_service.dart';
 import 'package:marvel/models/character.dart';
 
@@ -24,9 +25,14 @@ class CharactersPage extends StatefulWidget {
   _CharactersPageState createState() => _CharactersPageState();
 }
 
-class _CharactersPageState extends State<CharactersPage> implements MyAppBarDelegate{
-  
+class _CharactersPageState extends State<CharactersPage>
+    implements MyAppBarDelegate, CharactersListDelegate {
   final service = FakeAPIService();
+
+  @override
+  void didClickOnCharacter(Character char) {
+    print("didClickOnCharacter " + char.name);
+  }
 
   @override
   void didClickGridIcon() {
@@ -37,7 +43,7 @@ class _CharactersPageState extends State<CharactersPage> implements MyAppBarDele
   void didClickListIcon() {
     print("didClickListIcon");
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
@@ -47,36 +53,50 @@ class _CharactersPageState extends State<CharactersPage> implements MyAppBarDele
         DefaultWidgetsLocalizations.delegate,
       ],
       home: Scaffold(
-        appBar: MyAppBar(this),
-        body: FutureBuilder<List<Character>>(
-          future: service.fetchCharacters(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            return snapshot.hasData
-              ? CharactersList(characters: snapshot.data)
-              : Center(child: CircularProgressIndicator());
-          },
-        )
-        
-      ),
+          appBar: MyAppBar(this),
+          body: FutureBuilder<List<Character>>(
+            future: service.fetchCharacters(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              return snapshot.hasData
+                  ? CharactersList(characters: snapshot.data, delegate: this)
+                  : Center(child: CircularProgressIndicator());
+            },
+          )),
     );
   }
 }
 
+abstract class CharactersListDelegate {
+  void didClickOnCharacter(Character char);
+}
+
 class CharactersList extends StatelessWidget {
   final List<Character> characters;
-
-  CharactersList({Key key, this.characters}) : super(key: key);
+  final CharactersListDelegate delegate; 
+  
+  CharactersList({Key key, 
+  @required this.characters, 
+  @required this.delegate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      physics: BouncingScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
       ),
       itemCount: characters.length,
       itemBuilder: (context, index) {
-        return Text(characters[index].name);
+        return GestureDetector(
+          child: CharacterGridWidget(
+            character: characters[index],
+          ),
+          onTap: () { 
+            final char = this.characters[index];
+            delegate.didClickOnCharacter(char);
+          },
+        );
       },
     );
   }
@@ -95,12 +115,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   void switchToGrid() {
     delegate.didClickGridIcon();
   }
+
   void switchToList() {
     delegate.didClickListIcon();
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(60.0); 
+  Size get preferredSize => Size.fromHeight(60.0);
 
   @override
   Widget build(BuildContext context) {

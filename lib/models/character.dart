@@ -5,7 +5,7 @@ class Thumbnail {
   Thumbnail({this.path, this.ext});
 
   String fullPath() {
-    return path + ext;
+    return path + "." + ext;
   }
 
   factory Thumbnail.fromJson(Map<String, dynamic> json) {
