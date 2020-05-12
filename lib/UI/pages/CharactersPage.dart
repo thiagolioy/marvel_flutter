@@ -35,6 +35,7 @@ class _CharactersPageState extends State<CharactersPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0xFF464343),
         appBar: MyAppBar(this),
         body: FutureBuilder<List<Character>>(
           future: service.fetchCharacters(),
