@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:marvel/services/api_service.dart';
 import 'package:marvel/models/character.dart';
 import 'package:marvel/UI/widgets/CharacterGridWidget.dart';
 
@@ -7,7 +6,7 @@ class CharactersGrid extends StatelessWidget {
   final List<Character> characters;
   final void Function(Character) callback;
 
-  CharactersGrid({Key key, @required this.characters, @required this.callback})
+  const CharactersGrid({Key key, @required this.characters, @required this.callback})
       : super(key: key);
 
   @override

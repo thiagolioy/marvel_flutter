@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marvel/UI/pages/CharactersPage.dart';
+import 'package:marvel/routes/routes.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,11 +8,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Marvel',
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: CharactersPage(),
+      title: 'Marvel',
+      initialRoute: "/",
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
